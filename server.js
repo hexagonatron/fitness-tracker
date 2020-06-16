@@ -28,7 +28,13 @@ app.get("/stats", (req, res) => {
 });
 
 app.get("/api/workouts", (req, res) => {
-    res.send(200);
+    
+    db.Workout.find({}).populate("exercises").then(workouts => {
+        console.log(workouts);
+        res.json(workouts)
+    }).catch(err => {
+        res.json(err);
+    })
 });
 
 

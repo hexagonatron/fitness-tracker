@@ -4,24 +4,29 @@ const Schema = mongoose.Schema;
 
 const ExerciseSchema = new Schema({
   type: {
-    
+    type: String
   },
   name: {
-
+    type: String
   },
   duration: {
-
+    type: Number
+    
   },
-  weight: {
-
-  },
-  reps: {
-
-  },
-  sets: {
-
-  },
+  // weight: {
+  //   type: Number
+    
+  // },
+  // reps: {
+  //   type: Number
+    
+  // },
+  // sets: {
+  //   type: Number
+    
+  // },
   distance: {
+    type: Number
     
   }
 });
