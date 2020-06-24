@@ -46,8 +46,40 @@ router.get("/api/workouts/range", (req, res) => {
     const weekAgo = Date.now() - 1000 * 60 * 60 * 24 * 7;
 
     db.Workout.find({day:{$gte: weekAgo}}).then(workouts => {
-        console.log(workouts);
-        res.send(workouts);
+
+        console.log("FIRED!")
+        
+        const collatedWorkoutArray = workouts.reduce((fixedArray, workout, i) => {
+
+            //if there are more than one workout in a given day this monstrosity will collate all the workouts into a single one
+
+            //Don't show Trent, he might get scared because I used javascript dates.
+
+            if(fixedArray.length === 0){
+                fixedArray.push(workout);
+            } else if(new Date(fixedArray[fixedArray.length -1].day).getDay() === new Date(workout.day).getDay() ){
+                //If days are the same then collate
+
+                fixedArray[fixedArray.length -1].exercises = [
+                    ...fixedArray[fixedArray.length -1].exercises,
+                    ...workout.exercises
+                ];
+            } else {
+                
+                fixedArray.push(workout);
+            }
+
+            return fixedArray
+
+        },[]);
+
+        //arrange workouts so that sunday is first so that the graph works properly
+        collatedWorkoutArray.sort((a, b) => {
+            return new Date(a.day).getDay() - new Date(b.day).getDay()
+        });
+        
+        console.log(collatedWorkoutArray);
+        res.send(collatedWorkoutArray);
     })
 })
 

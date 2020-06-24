@@ -187,27 +187,26 @@ function populateChart(data) {
 }
 
 function duration(data) {
-  let durations = [];
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
-    });
-  });
-
+  const durations = data.map(workout => {
+    return workout.exercises.reduce((total, exercise) => {
+      return +exercise.duration? total += exercise.duration: total;
+    },0)
+  })
+  
   return durations;
 }
 
+//fixed these functions so that they actually work....
+
 function calculateTotalWeight(data) {
-  let total = [];
-
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      total.push(exercise.weight);
-    });
-  });
-
-  return total;
+  
+  const weight = data.map(workout => {
+    return workout.exercises.reduce((total, exercise) => {
+      return +exercise.weight? total += exercise.weight: total;
+    },0)
+  })
+  return weight;
 }
 
 function workoutNames(data) {
