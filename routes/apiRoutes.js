@@ -7,7 +7,15 @@ router.get("/api/workouts", (req, res) => {
     console.log(now)
     
     db.Workout.find({}).then(workouts => {
-        res.json(workouts)
+        const result = workouts.map(workout => {
+            const workoutObject = workout.toObject();
+            workoutObject.totalDuration = workout.exercises.reduce((totalDur, exercise) => totalDur + exercise.duration, 0);
+
+            return workoutObject;
+        });
+        
+        console.log(result);
+        res.json(result);
     }).catch(err => {
         res.json(err);
     })
@@ -26,9 +34,6 @@ router.post("/api/workouts", (req, res) => {
 router.put("/api/workouts/:id", (req, res) => {
     const exercise = req.body;
     const workoutId = req.params.id
-
-    console.log(req.body)
-    console.log(workoutId)
 
     db.Workout.findById(workoutId).then(workout => {
         
