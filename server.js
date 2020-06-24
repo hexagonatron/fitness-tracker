@@ -1,10 +1,10 @@
 const express = require("express");
 const logger = require("morgan");
-const mongoose = require("mongoose");
+const mongoose = require("mongoose").set('debug', true);
 const path = require("path");
 require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 const db = require("./models");
 
@@ -19,24 +19,11 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/populate", { useNewUrlParser: true });
 
-app.get("/exercise", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/exercise.html"));
-});
+const htmlRoutes = require("./routes/htmlRoutes.js");
+const apiRoutes = require("./routes/apiRoutes.js");
 
-app.get("/stats", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/stats.html"));
-});
-
-app.get("/api/workouts", (req, res) => {
-    
-    db.Workout.find({}).populate("exercises").then(workouts => {
-        console.log(workouts);
-        res.json(workouts)
-    }).catch(err => {
-        res.json(err);
-    })
-});
-
+app.use(htmlRoutes);
+app.use(apiRoutes);
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);

@@ -1,4 +1,4 @@
-let mongoose = require("mongoose");
+let mongoose = require("mongoose").set('debug', true);
 let db = require("../models");
 require("dotenv").config();
 
