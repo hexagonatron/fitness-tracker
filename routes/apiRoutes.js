@@ -58,8 +58,6 @@ router.get("/api/workouts/range", (req, res) => {
 
             //if there are more than one workout in a given day this monstrosity will collate all the workouts into a single one
 
-            //Don't show Trent, he might get scared because I used javascript dates.
-
             if(fixedArray.length === 0){
                 fixedArray.push(workout);
             } else if(new Date(fixedArray[fixedArray.length -1].day).getDay() === new Date(workout.day).getDay() ){
